@@ -1,18 +1,45 @@
-# Social Signals Repository by RepublicOfData.io
-RepublicOfData.io's Social Signals Repository is your go-to for actionable, ethical data. Designed for social activists and corporate innovators alike, we offer data sets on Economic Trends to Climate Change. Each module includes a practical micro data product, equipping you to craft solutions for societal good.
+# social_signals
+
+**Empower your data activism with `social_signals`: the Python toolkit for harvesting and analyzing social signal feeds.**
+
+## About `social_signals`
+
+In the digital age, social signals are the heartbeat of societal trends, opinions, and movements. The `social_signals` package is crafted by RepublicOfData.io to offer data product builders a robust, efficient tool for tapping into this pulse. Whether it's global events, economic indicators, or health statistics, `social_signals` provides a gateway to gather and interpret the data that matters.
 
 ## Features
-- **Multi-topic Data Modules**: Ranging from Economic Trends to Climate Change Awareness.
-- **Ethically-Sourced Data**: Trustworthy sources like GDELT, World Bank, and OpenStreetMap.
-- **Practical Micro Data Products**: Actionable tools accompanying each data set.
 
-## How to Use
-1. **Explore Modules**: Navigate through various topics to find the data you need.
-2. **Download Data**: Select the relevant data sets for your project.
-3. **Deploy Micro Data Products**: Utilize the accompanying micro data product for practical applications.
+- **Extensible Data Connectors:** Effortlessly connect to a variety of data sources with built-in support for APIs, databases, and creative data retrieval methods.
+- **Ethical Data Harvesting:** Compliant with legal frameworks, we ensure the data is sourced responsibly and ethically.
+- **User-Centric Design:** Built for Python-savvy data product builders, focusing on efficiency and performance.
+
+## Installation
+
+To install the package, use Poetry:
+
+```bash
+poetry add social_signals
+```
+
+## Quick Start
+
+```python
+from social_signals import gdelt
+
+# Harvest GDELT articles within a date range and specific criteria
+articles_df = gdelt.get_articles(from_date, to_date, event_code, country)
+```
+
+## Documentation
+Dive deeper into the usage and capabilities of social_signals in our [documentation](/docs).
+
+## Examples
+Explore practical examples and use cases in the [examples](/examples) section.
 
 ## Contributing
-Want to contribute? Reach out to [me](mailto:odupuis@lantrns.co)
+Interested in contributing to the social_signals project? Check out our [contribution guidelines](/CONTRIBUTING.md).
 
 ## License
-This project is licensed under the MIT License.
+social_signals is released under the [MIT License](LICENSE).
+
+## Join the Movement
+social_signals is more than a package; it's a statement. By using it, you join a community dedicated to fostering transparency, progress, and data-driven social innovation. Let's craft a better society together, one data point at a time.
