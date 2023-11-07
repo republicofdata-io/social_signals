@@ -30,7 +30,7 @@ articles_df = gdelt.get_articles(from_date, to_date, event_code, country)
 ```
 
 ## Documentation
-Dive deeper into the usage and capabilities of social_signals in our [documentation](/docs).
+Dive deeper into the usage and capabilities of social_signals in our [documentation](/docs/index.md).
 
 ## Examples
 Explore practical examples and use cases in the [examples](/examples) section.
