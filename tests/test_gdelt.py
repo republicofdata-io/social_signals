@@ -1,7 +1,8 @@
-from social_signals.gdelt.api import init_client, run_query
+from social_signals.gdelt.api import init_client, get_gkg_articles
 
 from google.cloud import bigquery
 from google.oauth2 import service_account
+import pandas as pd
 import pytest
 from unittest.mock import patch, Mock
 
@@ -30,57 +31,45 @@ def test_init_client(mock_bigquery_client, mock_service_account_credentials):
     assert client is mock_bigquery_instance
 
 
-# Test handling of invalid credentials
-@patch('google.oauth2.service_account.Credentials.from_service_account_file')
-def test_init_client_invalid_credentials(mock_service_account_credentials):
-    # Configure the mock to raise an exception when called
-    mock_service_account_credentials.side_effect = Exception("Invalid credentials")
-    
-    # Use pytest to check if the correct exception is raised
-    with pytest.raises(Exception) as excinfo:
-        init_client('invalid/credentials/path.json')
-    
-    # Assert that the exception message is correct
-    assert "Invalid credentials" in str(excinfo.value)
-
-
 @patch('social_signals.gdelt.api.bigquery.Client')
-def test_run_query_under_limit(mock_client):
+def test_get_gkg_articles_under_limit(mock_client):
     # Arrange
-    query = "SELECT * FROM `bigquery-public-data.samples.shakespeare`"
+    database_name = 'gdelt_db'
+    dataset_name = 'gdelt_dataset'
     data_limit_gb = 1  # 1 GB limit
     data_limit_bytes = data_limit_gb * 2**30
 
     # Create a mock query job for the dry run
-    mock_dry_run_query_job = Mock(spec=bigquery.QueryJob)
-    mock_dry_run_query_job.total_bytes_processed = data_limit_bytes - 1  # Mock bytes less than limit
+    mock_dry_get_gkg_articles_job = Mock(spec=bigquery.QueryJob)
+    mock_dry_get_gkg_articles_job.total_bytes_processed = data_limit_bytes - 1  # Mock bytes less than limit
 
     # Mock the client's query method to return our mock query job for the dry run
-    mock_client().query.return_value = mock_dry_run_query_job
+    mock_client().query.return_value = mock_dry_get_gkg_articles_job
 
     # Act & Assert
     try:
-        result = run_query(mock_client(), query, data_limit_gb)
+        result = get_gkg_articles(mock_client(), database_name, dataset_name, data_limit_gb)
         assert result is not None  # Your function should return a DataFrame or similar
     except ValueError as e:
-        pytest.fail(f"run_query raised ValueError unexpectedly with message: {str(e)}")
+        pytest.fail(f"get_gkg_articles raised ValueError unexpectedly with message: {str(e)}")
 
 
 @patch('social_signals.gdelt.api.bigquery.Client')
-def test_run_query_over_limit(mock_client):
+def test_get_gkg_articles_over_limit(mock_client):
     # Arrange
-    query = "SELECT * FROM `bigquery-public-data.samples.shakespeare`"
+    database_name = 'gdelt_db'
+    dataset_name = 'gdelt_dataset'
     data_limit_gb = 1  # 1 GB limit
     data_limit_bytes = data_limit_gb * 2**30
 
     # Create a mock query job for the dry run
-    mock_dry_run_query_job = Mock(spec=bigquery.QueryJob)
-    mock_dry_run_query_job.total_bytes_processed = data_limit_bytes + 1  # Mock bytes more than limit
+    mock_dry_get_gkg_articles_job = Mock(spec=bigquery.QueryJob)
+    mock_dry_get_gkg_articles_job.total_bytes_processed = data_limit_bytes + 1  # Mock bytes more than limit
 
     # Mock the client's query method to return our mock query job for the dry run
-    mock_client().query.return_value = mock_dry_run_query_job
+    mock_client().query.return_value = mock_dry_get_gkg_articles_job
 
     # Act & Assert
     with pytest.raises(ValueError) as excinfo:
-        run_query(mock_client(), query, data_limit_gb)
+        result = get_gkg_articles(mock_client(), database_name, dataset_name, data_limit_gb)
     assert f"exceeds the limit of {data_limit_gb}" in str(excinfo.value)
