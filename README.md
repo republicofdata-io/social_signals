@@ -1,4 +1,4 @@
-# Social Signals
+# social_signals
 
 **Channel the power of data for societal good with social_signals: the definitive Python toolkit for ethically sourcing and interpreting the social pulse of the digital world.**
 
