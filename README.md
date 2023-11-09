@@ -1,10 +1,10 @@
-# social_signals
+# Social Signals
 
-**Empower your data activism with `social_signals`: the Python toolkit for harvesting and analyzing social signal feeds.**
+**Channel the power of data for societal good with social_signals: the definitive Python toolkit for ethically sourcing and interpreting the social pulse of the digital world.**
 
 ## About `social_signals`
 
-In the digital age, social signals are the heartbeat of societal trends, opinions, and movements. The `social_signals` package is crafted by RepublicOfData.io to offer data product builders a robust, efficient tool for tapping into this pulse. Whether it's global events, economic indicators, or health statistics, `social_signals` provides a gateway to gather and interpret the data that matters.
+In a data-driven world, the `social_signals` toolkit is an indispensable ally for developers and researchers who need to harvest public data efficiently and ethically. Built with the modern data product builder in mind, it serves as a pragmatic, yet principled, gateway to understanding societal trends, opinions, and movements. `social_signals` delivers the power to tap into a wealth of social signal feeds while ensuring compliance with the highest standards of data ethics and privacy.
 
 ## Features
 
@@ -33,7 +33,7 @@ articles_df = gdelt.get_articles(from_date, to_date, event_code, country)
 Dive deeper into the usage and capabilities of social_signals in our [documentation](/docs/index.md).
 
 ## Examples
-Explore practical examples and use cases in the [examples](/examples) section.
+Explore practical examples and use cases in the [examples](/examples/index.md) section.
 
 ## Contributing
 Interested in contributing to the social_signals project? Check out our [contribution guidelines](/CONTRIBUTING.md).
