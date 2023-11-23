@@ -14,23 +14,20 @@ In a data-driven world, the `social_signals` toolkit is an indispensable ally fo
 
 ## Installation
 
-To install the package, use Poetry:
+To install the package:
 
 ```bash
-poetry add social_signals
+pip install social-signals
 ```
 
 ## Quick Start
 
 ```python
-from social_signals import gdelt
+from social_signals.gdelt.api import get_gkg_articles
 
 # Harvest GDELT articles within a date range and specific criteria
-articles_df = gdelt.get_articles(from_date, to_date, event_code, country)
+articles_df = gdelt_articles_df = get_gkg_articles(..)
 ```
-
-## Documentation
-Dive deeper into the usage and capabilities of social_signals in our [documentation](/docs/index.md).
 
 ## Examples
 Explore practical examples and use cases in the [examples](/examples/index.md) section.
@@ -40,6 +37,3 @@ Interested in contributing to the social_signals project? Check out our [contrib
 
 ## License
 social_signals is released under the [MIT License](LICENSE).
-
-## Join the Movement
-social_signals is more than a package; it's a statement. By using it, you join a community dedicated to fostering transparency, progress, and data-driven social innovation. Let's craft a better society together, one data point at a time.
