@@ -1,6 +1,8 @@
 import wikipedia
 from pandas import DataFrame
 from datetime import timedelta
+from numpy import nan as NUMPY_NAN
+import warnings
 
 
 class WikipediaSource:
@@ -50,18 +52,15 @@ class WikipediaSource:
         search_results = wikipedia.search(search_term, results=n_pages)
 
         if len(search_results) == 0:
-            print(
-                f"0 search results found. Did you mean {wikipedia.suggest(search_term)}?"
+            warnings.warn(
+                f"0 search results found. Did you mean {wikipedia.suggest(search_term)}?",
+                category=UserWarning,
             )
-        elif (
-            search_results[0].lower() == search_term.lower()
-        ):  # Prevent ambiguous page name
-            search_results = search_results[1:]
 
         return search_results
 
     def get_wikipedia_page_data(
-        self, page_name: str, auto_suggest: bool = False, show_disambiguation_error=True
+        self, page_name: str, auto_suggest: bool = False
     ) -> None:
         """
         Retrieve data for a single Wikipedia page and add it to the DataFrame.
@@ -69,7 +68,6 @@ class WikipediaSource:
         Parameters:
         - page_name: The name of the Wikipedia page.
         - auto_suggest: Whether to automatically suggest alternative page names (default is False).
-        - show_disambiguation_error: Whether to display disambiguation error messages (default is True).
         """
         try:
             page = wikipedia.page(page_name, auto_suggest=auto_suggest)
@@ -77,16 +75,19 @@ class WikipediaSource:
             # Extract data for each specified column and add it to the DataFrame
             page_data = []
             for col in self.WIKIPEDIA_COLUMNS:
-                page_data.append(getattr(page, col))
+                try:
+                    page_data.append(getattr(page, col))
+                except:
+                    page_data.append(NUMPY_NAN)  # if page has no col data, insert None
 
             self.data.loc[len(self.data)] = page_data
         except wikipedia.exceptions.DisambiguationError as error:
             # Handle disambiguation errors (when the search term is ambiguous)
-            print(
-                f'Search term "{page_name}" is ambiguous and has multiple pages related to it. Change the search term to something more specific. Skipped.'
+            warning_msg = (
+                f'Search term "{page_name}" is ambiguous and has multiple pages related to it. '
+                "Change the search term to something more specific. Skipped."
             )
-            if show_disambiguation_error:
-                print(error)
+            warnings.warn(warning_msg, category=UserWarning)
 
     def get_related_wikipedia_pages_data(self, search_term: str, n_pages: int) -> None:
         """
@@ -98,7 +99,7 @@ class WikipediaSource:
         """
         # Get a list of Wikipedia page names related to the search term
         related_pages = self.search(search_term, n_pages)
-        
+
         # Retrieve and add data for each related Wikipedia page to the DataFrame
         for page in related_pages:
-            self.get_wikipedia_page_data(page, show_disambiguation_error=False)
+            self.get_wikipedia_page_data(page)
