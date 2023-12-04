@@ -1,5 +1,4 @@
 from social_signals.x.source import XSource
-import json
 import os
 from datetime import datetime, timedelta
 
