@@ -1,5 +1,5 @@
 import requests
-import json
+import pandas as pd
 
 class XSource:
     TWEET_COLUMNS = [
@@ -8,7 +8,6 @@ class XSource:
         "tweet_text",
         "tweet_public_metrics",
         "author_id",
-        "author_description",
         "author_username",
         "author_description",
         "author_created_at",
@@ -68,4 +67,34 @@ class XSource:
         if response.status_code != 200:
             raise Exception(response.status_code, response.text)
         
-        return response.json()
+        json_response = response.json()
+        return self._parse_response_to_dataframe(json_response)
+    
+
+    def _parse_response_to_dataframe(self, json_response) -> pd.DataFrame:
+        data = json_response.get('data', [])
+        includes = json_response.get('includes', {}).get('users', [])
+
+        # Create a dictionary for user data for easy lookup
+        users_dict = {user['id']: user for user in includes}
+
+        # Extract relevant data and construct a list of dictionaries
+        rows = []
+        for tweet in data:
+            user = users_dict.get(tweet['author_id'], {})
+            row = {
+                'tweet_id': tweet['id'],
+                'tweet_created_at': tweet['created_at'],
+                'tweet_text': tweet['text'],
+                'tweet_public_metrics': tweet['public_metrics'],
+                'author_id': tweet['author_id'],
+                'author_username': user.get('username', ''),
+                'author_description': user.get('description', ''),
+                'author_created_at': user.get('created_at', ''),
+                'author_public_metrics': user.get('public_metrics', {})
+            }
+            rows.append(row)
+
+        # Convert the list of dictionaries into a DataFrame
+        df = pd.DataFrame(rows, columns=self.TWEET_COLUMNS)
+        return df

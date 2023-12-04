@@ -15,6 +15,8 @@ yesterday = datetime.now() - timedelta(days=1)
 start_time = yesterday.strftime('%Y-%m-%dT00:00:00Z')
 
 # Get recent tweets based on the search term, limiting to 10 results
-search_results = source.search(search_term, n_results=10, start_time=start_time) 
+search_results = source.search(search_term, n_results=10, start_time=start_time)
+
+# Convert the DataFrame to JSON and print it
 print("Search results:")
-print(json.dumps(search_results, indent=4, sort_keys=True))
+print(search_results.to_json(orient="records", lines=True, indent=4))
