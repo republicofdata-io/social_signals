@@ -7,9 +7,12 @@ Welcome to the examples directory for the `social_signals` package. Here you'll 
 - [`gdelt_example.py`](gdelt_example.py): Shows how to set up a data connector and fetch data from source GDELT.
 - [`x_example.py`](x_example.py): Shows how to set up a data connector and fetch data from source X.
 
+- [`wikipedia_example.py`](wikipedia_example.py): Shows how to fetch data from source Wikipedia.
+
 ## Prerequisites
 
 Before running the examples, make sure you have:
+
 - Poetry installed on your machine
 - An active internet connection
 - Any necessary API keys or authentication tokens
