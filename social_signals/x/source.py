@@ -13,6 +13,7 @@ class XSource:
         "author_created_at",
         "author_public_metrics"        
     ]
+    SEARCH_URL = "https://api.twitter.com/2/tweets/search/recent"
 
     def __init__(
         self,
@@ -50,7 +51,6 @@ class XSource:
         Returns:
         A list of recent tweets related to the search term.
         """
-        search_url = "https://api.twitter.com/2/tweets/search/recent"
 
         query_params = {
             'query': f'{search_term}', 
@@ -61,9 +61,8 @@ class XSource:
             'user.fields': 'id,name,username,description,created_at,public_metrics'
         }
 
-        response = requests.get(search_url, auth=self.bearer_oauth, params=query_params)
+        response = requests.get(self.SEARCH_URL, auth=self.bearer_oauth, params=query_params)
 
-        print(response.status_code)
         if response.status_code != 200:
             raise Exception(response.status_code, response.text)
         
