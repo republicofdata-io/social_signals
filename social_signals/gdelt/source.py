@@ -20,30 +20,6 @@ class GDELTSource:
 
 
     def get_gkg_articles(
-                self,
-                database_name: str = 'gdelt-bq', 
-                dataset_name: str = 'gdeltv2', 
-                articles_date: datetime = datetime.today().strftime('%Y%m%d'),
-                primary_location_country: str = 'united states',
-                theme: str = 'protest',
-                data_limit_gb: int = 1
-        ):
-            """
-            Retrieves GKG articles from the GDELT database on BigQuery.
-
-            Parameters:
-            - database_name (str): The name of the BigQuery database to query. Default is 'gdelt-bq'.
-            - dataset_name (str): The name of the dataset within the database to query. Default is 'gdeltv2'.
-            - articles_date (datetime): The date of the articles to retrieve in the format '%Y%m%d'. Default is today's date.
-            - primary_location_country (str): The primary location country to filter the articles. Default is 'united states'.
-            - theme (str): The theme to filter the articles. Default is 'protest'.
-            - data_limit_gb (int): The maximum data limit in gigabytes that the query can process. Default is 1 GB.
-
-            Returns:
-            - articles_df (pandas.DataFrame): A DataFrame containing the retrieved GKG articles.
-            """
-            # Function code...
-    def get_gkg_articles(
             self,
             database_name: str = 'gdelt-bq', 
             dataset_name: str = 'gdeltv2', 
@@ -51,7 +27,21 @@ class GDELTSource:
             primary_location_country: str = 'united states',
             theme: str = 'protest',
             data_limit_gb: int = 1
-    ):
+        ):
+        """
+        Retrieves GKG articles from the GDELT database on BigQuery.
+
+        Parameters:
+        - database_name (str): The name of the BigQuery database to query. Default is 'gdelt-bq'.
+        - dataset_name (str): The name of the dataset within the database to query. Default is 'gdeltv2'.
+        - articles_date (datetime): The date of the articles to retrieve in the format '%Y%m%d'. Default is today's date.
+        - primary_location_country (str): The primary location country to filter the articles. Default is 'united states'.
+        - theme (str): The theme to filter the articles. Default is 'protest'.
+        - data_limit_gb (int): The maximum data limit in gigabytes that the query can process. Default is 1 GB.
+
+        Returns:
+        - articles_df (pandas.DataFrame): A DataFrame containing the retrieved GKG articles.
+        """
         # Convert gigabytes to bytes for the dry run limit comparison
         data_limit_bytes = data_limit_gb * 2**30  # 1 GB in bytes
 
