@@ -5,6 +5,23 @@ import pandas as pd
 
 
 class NOAASource:
+    """
+    Class for interacting with NOAA (National Oceanic and Atmospheric Administration) data sources.
+
+    Attributes:
+    - API_URL: Base URL for NOAA API v2.
+    - V1_API_URL: Base URL for NOAA API v1 (legacy api, may be unnecessary in the future).
+    - STATIONS_LIMIT: Maximum number of stations to retrieve in a single request.
+    - SUMMARY_STATIONS_LIMIT: Maximum number of stations to retrieve climate data in a single request.
+    - SUMMARY_COLUMNS: List of columns of the GSOM dataset.
+
+    Methods:
+    - __init__: Constructor for the NOAASource class.
+    - request: Send an HTTP GET request and return the JSON response.
+    - get_stations: Retrieve information about NOAA weather stations.
+    - get_stations_data: Retrieve weather data for a list of NOAA weather stations.
+    """
+
     API_URL = "https://www.ncei.noaa.gov/cdo-web/api/v2"
     V1_API_URL = (
         "https://www.ncei.noaa.gov/access/services/data/v1"  # might be unnecessary!
@@ -48,10 +65,27 @@ class NOAASource:
         "HDSD",
     ]
 
-    def __init__(self, ncdc_token: str) -> None:
-        self.token_header = {"token": ncdc_token}
+    def __init__(self, noaa_token: str) -> None:
+        """
+        Constructor for the NOAASource class.
+
+        Parameters:
+        - ncdc_token: Token for accessing NOAA API (https://www.ncdc.noaa.gov/cdo-web/token).
+        """
+
+        self.token_header = {"token": noaa_token}
 
     def request(self, url) -> dict | None:
+        """
+        Send an HTTP GET request and return the JSON response.
+
+        Parameters:
+        - url: The URL for the HTTP GET request.
+
+        Returns:
+        The JSON response as a dictionary, or None if the request fails.
+        """
+
         response = requests.get(url, headers=self.token_header)
         if response.status_code == 200:
             return response.json()
@@ -59,6 +93,16 @@ class NOAASource:
             print(f"Error: {response.status_code} - {response.text}")
 
     def get_stations(self, dataset: str = "GSOM") -> pd.DataFrame:
+        """
+        Retrieve information about NOAA weather stations.
+
+        Parameters:
+        - dataset: The dataset ID for weather stations (default is "GSOM").
+
+        Returns:
+        A pandas DataFrame containing information about NOAA weather stations.
+        """
+
         url = f"{self.API_URL}/stations?datasetid={dataset}&limit={self.STATIONS_LIMIT}"
         data = self.request(url)
         stations_count = data["metadata"]["resultset"]["count"]
@@ -78,6 +122,17 @@ class NOAASource:
     def get_stations_data(
         self, *, dataset: str = "global-summary-of-the-month", stations: list[str]
     ) -> pd.DataFrame:
+        """
+        Retrieve weather data for a list of NOAA weather stations.
+
+        Parameters:
+        - dataset: The dataset ID for weather data (default is "global-summary-of-the-month").
+        - stations: List of NOAA weather station IDs.
+
+        Returns:
+        A pandas DataFrame containing weather data for the specified stations.
+        """
+
         url = f"{self.V1_API_URL}?dataset={dataset}&startDate=0001-01-01&endDate=9996-12-31&format=json"
 
         stations_data = pd.DataFrame(columns=self.SUMMARY_COLUMNS)
