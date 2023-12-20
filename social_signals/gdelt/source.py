@@ -121,7 +121,7 @@ class GDELTSource:
                     select true 
                     from unnest(split(themes, ';')) theme with offset
                     where offset < 10
-                    and theme = lower('{theme}')
+                    and theme like lower('{theme}')
                     limit 1
                 ) is not null
 
