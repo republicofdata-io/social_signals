@@ -36,7 +36,7 @@ class GDELTSource:
         - dataset_name (str): The name of the dataset within the database to query. Default is 'gdeltv2'.
         - articles_date (datetime): The date of the articles to retrieve in the format '%Y%m%d'. Default is today's date.
         - primary_location_name_includes (str): The name of a country, state, or city to filter the articles. Default is 'united states'.
-        - theme (str): The theme to filter the articles. Default is 'protest'.
+        - theme (str): The theme to filter the articles. Default is 'protest'. See list here: http://data.gdeltproject.org/api/v2/guides/LOOKUP-GKGTHEMES.TXT
         - data_limit_gb (int): The maximum data limit in gigabytes that the query can process. Default is 1 GB.
 
         Returns:
@@ -110,7 +110,7 @@ class GDELTSource:
             filter_locations as (
 
                 select * from primary_locations
-                where primary_location like '%{primary_location_name_includes}%'
+                where primary_location like lower('%{primary_location_name_includes}%')
 
             ),
 
@@ -121,7 +121,7 @@ class GDELTSource:
                     select true 
                     from unnest(split(themes, ';')) theme with offset
                     where offset < 10
-                    and theme = '{theme}'
+                    and theme = lower('{theme}')
                     limit 1
                 ) is not null
 
