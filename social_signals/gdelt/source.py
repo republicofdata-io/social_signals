@@ -24,7 +24,7 @@ class GDELTSource:
             database_name: str = 'gdelt-bq', 
             dataset_name: str = 'gdeltv2', 
             articles_date: datetime = datetime.today().strftime('%Y%m%d'),
-            primary_location_country: str = 'united states',
+            primary_location_name_includes: str = 'united states',
             theme: str = 'protest',
             data_limit_gb: int = 1
         ):
@@ -35,7 +35,7 @@ class GDELTSource:
         - database_name (str): The name of the BigQuery database to query. Default is 'gdelt-bq'.
         - dataset_name (str): The name of the dataset within the database to query. Default is 'gdeltv2'.
         - articles_date (datetime): The date of the articles to retrieve in the format '%Y%m%d'. Default is today's date.
-        - primary_location_country (str): The primary location country to filter the articles. Default is 'united states'.
+        - primary_location_name_includes (str): The name of a country, state, or city to filter the articles. Default is 'united states'.
         - theme (str): The theme to filter the articles. Default is 'protest'.
         - data_limit_gb (int): The maximum data limit in gigabytes that the query can process. Default is 1 GB.
 
@@ -110,7 +110,7 @@ class GDELTSource:
             filter_locations as (
 
                 select * from primary_locations
-                where primary_location like '%{primary_location_country}%'
+                where primary_location like '%{primary_location_name_includes}%'
 
             ),
 

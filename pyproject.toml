@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "social-signals"
-version = "0.0.3"
+version = "0.0.4"
 description = "A package for harvesting social signal feeds."
-authors = ["Olivier Dupuis <odupuis@lantrns.co>"]
+authors = ["Olivier Dupuis <olivier@republicofdata.io>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

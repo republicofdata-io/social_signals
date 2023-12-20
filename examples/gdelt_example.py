@@ -11,7 +11,7 @@ gdelt_articles_df = source.get_gkg_articles(
     database_name = 'gdelt-bq', 
     dataset_name = 'gdeltv2', 
     articles_date = '20231109',
-    primary_location_country = 'united states',
+    primary_location_name_includes = 'united states',
     theme='protest',
     data_limit_gb = 1)
 
